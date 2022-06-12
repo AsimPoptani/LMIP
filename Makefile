@@ -1,3 +1,4 @@
+SHELL := /bin/bash
 # Phony
 .PHONY: database venv help all update-requirements
 all: venv
