@@ -1,10 +1,14 @@
 # Phony
-.PHONY: database venv help all update-requirements
-all: venv
+.PHONY: database venv help all update-requirements pre-commit
+all: venv pre-commit
 
 # Show this help.
 help:
 	@awk 'BEGIN {FS = ":.*##"; printf "Usage: make \033[36m<target>\033[0m\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-10s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
+
+pre-commit: venv
+	@echo "Installing pre-commit hook..."
+	source venv/bin/activate  && pre-commit autoupdate && pre-commit install
 
 database: venv ## Gets the databases for transform.
 	@echo "Building database..."
@@ -20,7 +24,7 @@ venv: ## Create venv and install dependencies.
 downloadAndTransform: database transform
 	@echo "Downloading and transforming data..."
 
-requirements: venv ## Update the project's packages requirements.
+requirements: pre-commit ## Update the project's packages requirements.
 	@echo "Updating packages..."
 	source venv/bin/activate  && pip freeze > requirements.txt
 
