@@ -24,6 +24,8 @@ def downloadDatasets(logger, unprocessed_data_dir="./data/unprocessed",tmp_dir="
 
     downloader.download_zip_and_unzip("https://storage.googleapis.com/magentadata/datasets/maestro/v3.0.0/maestro-v3.0.0-midi.zip","maestro",data_dir=unprocessed_data_dir,tmp_dir=tmp_dir)
 
+    downloader.download_zip_and_unzip("https://github.com/music-x-lab/POP909-Dataset/archive/refs/heads/master.zip","POP909",data_dir=unprocessed_data_dir,tmp_dir=tmp_dir)
+
 
 if __name__ == "__main__":
     # Set up a new logging with log name filter_midi.log 

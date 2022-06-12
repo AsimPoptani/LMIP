@@ -107,7 +107,10 @@ filter.filter_and_extract_folder("example/")
         # Get all midi files in the folder recursively
         midi_files = glob.glob(midi_folder+"/**/*.midi",recursive=True)
 
-        print(midi_folder)
+        mid_files=glob.glob(midi_folder+"/**/*.mid",recursive=True)
+
+        midi_files.extend(mid_files)
+
         
         # Log processing of the folder
         self._logger.info("Processing folder: {} with {} midi files".format(midi_folder,len(midi_files)))
