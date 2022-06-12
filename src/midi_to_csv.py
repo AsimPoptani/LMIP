@@ -81,12 +81,11 @@ filter.filter_and_extract_folder("example/")
 
         # Create a new midi file
         new_midi = pretty_midi.PrettyMIDI()
-       
 
         # Get all channels with the instruments specified in the list
         for instrument in midi.instruments:
             # Extract the notes and control name from the instrument
-            if instrument.name in self._instruments:
+            if instrument.program in self._instruments:
                 new_midi.instruments.append(instrument)
 
 
