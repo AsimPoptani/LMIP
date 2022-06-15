@@ -26,12 +26,16 @@ class PrettyMIDITensor:
 
         notes_sorted = sorted(instrument.notes, key=lambda x: x.start)
 
+        # TODO add control change
+
         # print(notes_sorted)
 
         pitch_tensors = []
         velocity_tensors = []
         duration_tensors = []
         step_tensors = []
+
+        note: pretty_midi.Note
 
         for index, note in enumerate(notes_sorted):
             # Output pitch (0-127), velocity (0-127) , duration (float), step (float)
@@ -89,9 +93,46 @@ class PrettyMIDITensor:
         instrument = pretty_midi.Instrument(program=0)
         # Add the instrument to the PrettyMIDI object
         midi.instruments.append(instrument)
-        pass
+
+        current_time = 0.0
+
+        # Tensor dict has lists of pitch (0-127), velocity (0-127) , duration (float), step (float)
+        """
+            "pitch_tensors": pitch_tensors,
+            "velocity_tensors": velocity_tensors,
+            "duration_tensors": duration_tensors,
+            "step_tensors": step_tensors,
+        """
+        # Extract dictionary
+        try:
+            pitches = tensor["pitch_tensors"]
+            velocities = tensor["velocity_tensors"]
+            durations = tensor["duration_tensors"]
+            steps = tensor["step_tensors"]
+        except Exception as e:
+            self._logger.error(
+                "One of the parameters passed back is missing please check the model"
+            )
+            raise e
+
+        notes = []
+        for index in range(len(pitches)):
+            new_note = self.tensor_to_note(
+                pitches[index], velocities[index], durations[index], current_time
+            )
+            current_time += float(steps[index])
+            notes.append(new_note)
+
+        instrument.notes.extend(notes)
+
+        return midi
 
 
-example_data = "../data/processed/0bdd24c1-b87b-4abe-843a-4c9718a12a92.mid"
-pretty_mid = pretty_midi.PrettyMIDI(example_data)
-print(PrettyMIDITensor().pretty_midi_to_tensor(pretty_mid, example_data)[0])
+# import os
+# example_data = os.path.join(os.path.__file__,os.path.abspath("./data/processed/0bdd24c1-b87b-4abe-843a-4c9718a12a92.mid"))
+# pretty_mid = pretty_midi.PrettyMIDI(example_data)
+# pretty_to_tensor=PrettyMIDITensor()
+# data=pretty_to_tensor.pretty_midi_to_tensor(pretty_mid, example_data)
+# data2=pretty_to_tensor.tensor_to_midi(data)
+# print(data2.instruments[0].notes)
+# print(sorted(pretty_mid.instruments[0].notes,key= lambda note: note.start))
