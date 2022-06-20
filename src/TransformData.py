@@ -3,7 +3,7 @@ import os, logging
 
 
 def transformData(
-    logger,
+    logger=logging.getLogger(name="TransformData"),
     unprocessed_data_dir="./data/unprocessed",
     processed_data_dir="./data/processed",
     replication=False,

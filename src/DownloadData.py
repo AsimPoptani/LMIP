@@ -5,7 +5,9 @@ from pull_data import DownloadHelper
 
 
 def downloadDatasets(
-    logger, unprocessed_data_dir="./data/unprocessed", tmp_dir="./tmp"
+    logger=logging.getLogger(name="DownloadDatasets"),
+    unprocessed_data_dir="./data/unprocessed",
+    tmp_dir="./tmp",
 ):
     logger.info(f"Downloading datasets {datetime.datetime.now()}")
     # Get real path to data dir
