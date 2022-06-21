@@ -21,7 +21,11 @@ class LSTMGenerator(nn.Module):
 
         self.linear2 = nn.Linear(in_features=500, out_features=500)
 
-    def forward(self, random_or_info):
+        self.random = torch.rand(500)
+
+    def forward(self, random_or_info=None):
+        if random_or_info is None:
+            random_or_info = self.random
 
         # random_or_info size of batch,500
         lstm = self.lstm(random_or_info)[0]
