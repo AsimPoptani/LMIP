@@ -1,4 +1,5 @@
 import pretty_midi, logging, datetime, torch
+from torch.functional import F
 
 
 class PrettyMIDITensor:
@@ -63,6 +64,13 @@ class PrettyMIDITensor:
             duration_tensors.append(duration_tensor)
             step_tensors.append(step_tensor)
 
+        pitch_tensors = F.one_hot(
+            torch.tensor(pitch_tensors, dtype=torch.int64), 128
+        ).type(torch.float32)
+        velocity_tensors = F.one_hot(
+            torch.tensor(velocity_tensors, dtype=torch.int64), 128
+        ).type(torch.float32)
+
         return {
             "pitch_tensors": pitch_tensors,
             "velocity_tensors": velocity_tensors,
@@ -79,9 +87,12 @@ class PrettyMIDITensor:
     ) -> pretty_midi.Note:
         # Return a note with the pitch, velocity, duration and step
         end = start_time + duration_tensor
+        # Get index of velocity and pitch index 1
+        velocity_index = velocity_tensor.argmax()
+        pitch_index = pitch_tensor.argmax()
         return pretty_midi.Note(
-            velocity=self.velocity_range[velocity_tensor],
-            pitch=self.pitch_range[pitch_tensor],
+            velocity=self.velocity_range[velocity_index],
+            pitch=self.pitch_range[pitch_index],
             start=start_time,
             end=end,
         )
