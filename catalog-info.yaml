@@ -1,0 +1,10 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: LMIP
+  annotations:
+    github.com/project-slug: AsimPoptani/LMIP
+spec:
+  type: other
+  lifecycle: unknown
+  owner: guests
