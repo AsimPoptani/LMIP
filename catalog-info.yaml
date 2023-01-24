@@ -4,6 +4,7 @@ metadata:
   name: LMIP
   annotations:
     github.com/project-slug: AsimPoptani/LMIP
+    backstage.io/techdocs-ref: https://github.com/AsimPoptani/LMIP/blob/master/catalog-info.yaml
 spec:
   type: other
   lifecycle: unknown
